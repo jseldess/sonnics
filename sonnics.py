@@ -6,8 +6,10 @@ Example usage:
 
     Generate poem with 14 lines in couplets:
         python3 sonnics.py -m 14 -sz "couplets"
-    Generate poem with 14 lines in petrarchan stanzaic form:
+    Generate poem with 14 lines in Petrarchan stanzaic form:
         python3 sonnics.py -m 14 -sz "petrarchan"
+    Generate poem with 14 lines in Elizabethan stanzaic form:
+        python3 sonnics.py -m 14 -sz "elizabethan"
     Generate poem with 14 lines, random stanza breaks:
         python3 sonnics.py -m 14 -sz "random"
     Generate poem with 14 lines, no stanza breaks:
@@ -35,7 +37,7 @@ parser.add_argument("-d", "--new_file_dir",
                     default="generated_files")
 parser.add_argument("-m", "--max_lines", type=int,
                     help="Max number of lines of text in total.")
-parser.add_argument("-sz", "--stanzas", choices=["couplets", "random", "petrarchan", "none"],
+parser.add_argument("-sz", "--stanzas", choices=["couplets", "random", "petrarchan", "elizabethan", "none"],
                     help="""Stanzaic form. Either couplets with one empty
                     line between, random with 0-4 empty lines between, or no
                     stanza breaks (default: couplets).""",
@@ -60,6 +62,8 @@ if args.stanzas == "couplets":
     filename += "_couplets"
 if args.stanzas == "petrarchan":
     filename += "_petrarchan"
+if args.stanzas == "elizabethan":
+    filename += "_elizabethan"
 if args.stanzas == "random":
     filename += "_random"
 filename += "_py.txt"
@@ -70,8 +74,6 @@ with open(args.source_file) as file:
     source = file.readlines()
     lines_seen = set()
     total_lines = 0
-    couplet_lines = 0
-    petrarchan_lines = 0
     trimmed = 0
     while len(source) > 0:
         # If --max_lines is passed, break out of the loop
@@ -106,20 +108,20 @@ with open(args.source_file) as file:
             else:
                 print("Write line")
             total_lines += 1
-            couplet_lines += 1
-            petrarchan_lines += 1
             trimmed = 0
             # Define the stanzaic form.
             if args.stanzas == "couplets":
-                if couplet_lines == 2:
+                if (total_lines % 2) == 0:
                     new_file.write("\n")
-                    couplet_lines = 0
             if args.stanzas == "petrarchan":
-                if petrarchan_lines == 4:
+                if total_lines == 8:
                     new_file.write("\n")
-                if petrarchan_lines == 8:
+            if args.stanzas == "elizabethan":
+                if total_lines == 4:
                     new_file.write("\n")
-                if petrarchan_lines == 11:
+                if total_lines == 8:
+                    new_file.write("\n")
+                if total_lines == 12:
                     new_file.write("\n")
             if args.stanzas == "random":
                 if random.choice([0, 1]) == 1:
