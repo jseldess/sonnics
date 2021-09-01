@@ -24,7 +24,7 @@ import argparse
 import os
 import re
 import random
-from time import gmtime, strftime
+from time import gmtime, localtime, strftime
 
 parser = argparse.ArgumentParser(
     description="""TBD""")
@@ -53,7 +53,8 @@ if not os.path.exists(args.new_file_dir):
     os.makedirs(args.new_file_dir)
 
 # Create a new file named with the current timestamp and flags passed.
-filename = strftime("%Y-%m-%d-%H:%M:%S", gmtime())
+created_at = strftime("%Y-%m-%d-%H:%M:%S", localtime())
+filename = created_at
 if args.max_lines:
     filename += "_maxlines" + str(args.max_lines)
 if args.remove_words:
@@ -75,6 +76,7 @@ with open(args.source_file) as file:
     lines_seen = set()
     total_lines = 0
     trimmed = 0
+    new_file.write(created_at + " ET\n\n\n")
     while len(source) > 0:
         # If --max_lines is passed, break out of the loop
         # as soon as the max lines have been written.
