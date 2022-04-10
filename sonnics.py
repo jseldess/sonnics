@@ -30,7 +30,7 @@ parser = argparse.ArgumentParser(
     description="""TBD""")
 parser.add_argument("-s", "--source_file",
                     help="Source text file (default: source.txt).",
-                    default="source.txt")
+                    default="source_no_duplicates.txt")
 parser.add_argument("-d", "--new_file_dir",
                     help="""Path to the directory where the new file
                     will be created (default: generated_files).""",
