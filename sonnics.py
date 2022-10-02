@@ -128,7 +128,7 @@ with open(args.source_file) as file:
             if args.stanzas == "random":
                 if random.choice([0, 1]) == 1:
                     new_file.write(random.choice([
-                    "", "", "", "", "\n", "\n\n", "\n\n\n", "\n\n\n\n"]))
+                    "", "", "\n", "\n", "\n", "\n\n", "\n\n\n", "\n\n\n\n"]))
             if args.stanzas == "none":
                 continue
 
