@@ -17,6 +17,9 @@ Example usage:
     Generate poem with 14 lines in couplets, 2 removed
     from lines at random:
         python3 sonnics.py -m 14 -sz "couplets" -r 2
+    Generate poem with 14 lines, random stanza breaks,
+    skipping lines at random:
+        python3 sonnics.py -m 14 -sk -sz "random"
 
 """
 
@@ -30,7 +33,7 @@ parser = argparse.ArgumentParser(
     description="""TBD""")
 parser.add_argument("-s", "--source_file",
                     help="Source text file (default: source.txt).",
-                    default="source_no_duplicates.txt")
+                    default="source.txt")
 parser.add_argument("-d", "--new_file_dir",
                     help="""Path to the directory where the new file
                     will be created (default: generated_files).""",
@@ -42,6 +45,9 @@ parser.add_argument("-sz", "--stanzas", choices=["couplets", "random", "petrarch
                     line between, random with 0-4 empty lines between, or no
                     stanza breaks (default: couplets).""",
                     default=["couplets"])
+parser.add_argument("-sk", "--random_skip",
+                    action="store_true",
+                    help="Skip lines at random.")
 parser.add_argument("-r", "--remove_words", type=int,
                     help="""Number of words to remove from the start
                     of a line.""")
@@ -86,10 +92,12 @@ with open(args.source_file) as file:
         line = random.choice(source)
         source.remove(line)
         if not line.isspace():
-            # At random, skip the line and continue the next iteration.
-            if random.choice([0, 1]) == 1:
-                print("Skip line")
-                continue
+            # If --random_skip is passed, at random, skip the line 
+            # and continue the next iteration.
+            if args.random_skip:
+                if random.choice([0, 1]) == 1:
+                    print("Skip line")
+                    continue
             # If --remove_words is passed, remove the specified number
             # of words from the start of the line.
             if args.remove_words:
