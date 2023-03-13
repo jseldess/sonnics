@@ -109,10 +109,10 @@ with open(args.source_file) as file:
                     continue
             # If line already seen, continue the next iteration.
             else:
-                if line in lines_seen:
+                if line.lower().lstrip() in lines_seen:
                     continue
             new_file.write(line.lstrip())
-            lines_seen.add(line)
+            lines_seen.add(line.lower().lstrip())
             if trimmed == 1:
                 print("Write line, trimmed")
             else:
